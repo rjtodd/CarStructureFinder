@@ -51,12 +51,6 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:enabled="true"
-            android:exported="true"
-            android:name=".engine.LocationService">
-
-        </service>
     </application>
 
 </manifest>
