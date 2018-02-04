@@ -1,7 +1,9 @@
 package rjstudios.altimetertest;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -39,6 +41,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import rjstudios.altimetertest.engine.LocationService;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         /*,GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -74,6 +78,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     private LocationCallback mLocationCallback;
+    private LocationService  mLocationUpdatesService;
 
     @SuppressLint("MissingPermission")
     @Override
@@ -81,7 +86,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        /*mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         mLocationCallback = new LocationCallback() {
             @Override
@@ -93,10 +98,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         createLocationRequest();
         getLastLocation();
-
+*/
 
         //startLocationUpdates();
 
+    }
+
+    private class MyReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Location location = intent.getParcelableExtra(mLocationUpdatesService.getPackageName());
+            if (location != null) {
+                LatLng mLatLong = new LatLng(location.getLatitude(),location.getLongitude());
+                mMap.addMarker(new MarkerOptions()
+                        .position(mLatLong).title("Marker"));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(mLatLong));
+            }
+        }
     }
 
     /**
@@ -130,10 +148,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         settingsClient.checkLocationSettings(locationSettingsRequest);
 
         // new Google API SDK v11 uses getFusedLocationProviderClient(this)
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        mLocationCallBack = new LocationCallback(){
+        //mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        //mLocationCallBack = new LocationCallback(){
         //getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, new LocationCallback() {
-                    @Override
+                   /* @Override
                     public void onLocationResult(LocationResult locationResult) {
                         // do work here
                         Toast.makeText(MapsActivity.this,"Went in here",Toast.LENGTH_LONG).show();
@@ -145,7 +163,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(mLatLong));
                         //onLocationChanged(locationResult.getLastLocation());
                     }
-                };
+                };*/
                 //Looper.myLooper());
     }
 
