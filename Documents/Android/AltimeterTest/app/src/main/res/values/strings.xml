@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Car Finder</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="sensor_frag_text">Calculations</string>
+    <string name="weatherApi">APPID=30d4c6dc386cb72d7288dce7bb5d81e8</string>
+    <string name="DirectionApi">AIzaSyBPg_rrMxOc2HmCwfjASPEQ6fMYStKh5os</string>
+    <string name="Permission_Text">All permissions are necessary please grant them</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

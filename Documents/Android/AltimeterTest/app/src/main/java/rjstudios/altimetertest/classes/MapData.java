@@ -1,0 +1,31 @@
+package rjstudios.altimetertest.classes;
+
+/**
+ * Created by Ronan on 6/26/2017.
+ */
+
+public class MapData
+{
+    //GATHER THE ELEVATION FROM THE SPECIFIC LOCATION AND ELEVATION USING THE GOOGLE ELEVATION API
+    //THEN GATHER THE ATMOSPHERIC PRESSURE FROM OPENWEATHERMAP SEA LEVEL OR GROUND LEVEL PRESSURE? WHICH IS MORE USEFUL? IN HECTOPASCAL
+    //THEN GATHER THE OUTSIDE PRESSURE USING THE ENVIRONMENTAL SENSORS AND THEN TRY TO CALCULATE THE POSSIBLE ALTITUDE DIFFERENCE USING THE ATMOSPHERIC PRESSURE AS THE BASE
+    //BIGGEST PROBLEM IS THAT ATMOSPHERIC PRESSURE CHANGES AS TIME GOES BY SO HOW WILL THAT AFFECT THE CALCULATIONS?
+    //USE THE DIRECTIONS API TO NAVIGATE USER BACK TO THE LOCATION OF THE CAR
+
+
+
+    /*private float altitude;
+    public MapData(float altitude)
+    {
+        this.altitude = altitude;
+    }
+
+    public float getAltitude() {
+        return altitude;
+    }
+
+    public void setAltitude(float altitude) {
+        this.altitude = altitude;
+    }
+*/
+}
