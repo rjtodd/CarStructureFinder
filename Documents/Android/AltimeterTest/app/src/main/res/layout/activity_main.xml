@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="rjstudios.altimetertest.MainActivity">
 
-    <fragment
+    <!--<fragment
         class="rjstudios.altimetertest.SensorFragment"
         android:id="@+id/sensor_frag"
         android:layout_width="94dp"
@@ -16,7 +16,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="1.0" />-->
 
 
     <TextView

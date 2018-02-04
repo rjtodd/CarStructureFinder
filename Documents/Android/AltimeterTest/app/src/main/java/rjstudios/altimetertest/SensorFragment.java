@@ -26,6 +26,7 @@ import static rjstudios.altimetertest.engine.PressureActivity.SENSOR_MESSAGE;
 public class SensorFragment extends Fragment implements SensorEventListener{
 
     private long sensorId;
+    protected boolean flag = false;
     private ListView listview;
     private SensorManager mSensorManager = null;
     int mSensorType = Sensor.TYPE_PRESSURE;
@@ -79,9 +80,21 @@ public class SensorFragment extends Fragment implements SensorEventListener{
     @Override
     public void onSensorChanged(SensorEvent event) {
         pressData = event.values[0];
+        MainActivity.HE.setPressurePhone(pressData, MainActivity.HE.getAFTER());
         View view = getView();
         TextView pressView = (TextView) view.findViewById(R.id.sensor_text);
-        pressView.setText("Pressure: " + pressData);
+        float press = MainActivity.HE.calcHeightPress();
+        String message;
+        if (press < 0){
+            message = "Go UP by: " + press + 'm';
+        }
+        else if (press > 0){
+            message = "Go DOWN by: " + press + 'm';
+        }
+        else{
+            message = "Did not change";
+        }
+        pressView.setText(message);
         //Toast.makeText(this.getActivity(), "P: " + event.values[0], Toast.LENGTH_SHORT).show();
     }
 

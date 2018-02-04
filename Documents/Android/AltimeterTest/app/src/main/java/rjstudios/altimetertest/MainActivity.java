@@ -18,7 +18,7 @@ import rjstudios.altimetertest.engine.PressureActivity;
 public class MainActivity extends AbsRuntimePermission {
     TextView textView;
     private static final int REQUEST_PERMISSION = 10; //not too sure why this is 10 so be careful
-    HeightEngine HE;
+    static HeightEngine HE;
     static int LOCATION = -1;
     static int PRESSURE_CONVERSION = 100; // converter the hPa to Pascal
 
@@ -54,8 +54,8 @@ public class MainActivity extends AbsRuntimePermission {
                 //float temperatureData = -99999f;
                 float pressureData = -1f; //arbitrary initialization. The input in next line in uncertain FIX
                 if(requestCode == Sensor.TYPE_PRESSURE) {
-                    pressureData = data.getFloatExtra("pressure", pressureData) * PRESSURE_CONVERSION; //pressure in hPa (millibar) 100 pascals
-                    HE.setPressurePhone(pressureData, LOCATION);
+                    pressureData = data.getFloatExtra("pressure", pressureData); //pressure in hPa (millibar) 100 pascals
+                    HE.setPressurePhone(pressureData, HE.getBEFORE());
                     textView.setText("Pressure: " + pressureData);
                 }
                 /*else if(requestCode == Sensor.TYPE_AMBIENT_TEMPERATURE) {
@@ -85,6 +85,7 @@ public class MainActivity extends AbsRuntimePermission {
         resultDialog();
     }
     public void MapActivity(View view){
+        //HE.setPressurePhone(,HE.getBEFORE());
         startMapIntent();
     }
 

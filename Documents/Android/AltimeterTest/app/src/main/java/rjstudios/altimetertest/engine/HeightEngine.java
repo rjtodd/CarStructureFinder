@@ -45,27 +45,11 @@ public class HeightEngine
     public int getBEFORE(){
         return BEFORE;
     }
+
     public int getAFTER(){
         return AFTER;
     }
 
-/*
-    public Vector<Float> getTemperaturePhone() {
-        return temperaturePhone;
-    }
-
-    public void setTemperaturePhone(float temperaturePhone, int location) {
-        this.temperaturePhone.set(location, temperaturePhone);
-    }
-
-    public Vector<Float> getTemperatureAir() {
-        return temperatureAir;
-    }
-
-    public void setTemperatureAir(float temperatureAir, int location) {
-        this.temperatureAir.set(location, temperatureAir);
-    }
-*/
 
     public Vector<Float> getPressureAir() {
         return pressureAir;
