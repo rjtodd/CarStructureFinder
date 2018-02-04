@@ -49,6 +49,7 @@ public abstract class AbsRuntimePermission extends Activity{
         int permissionCheck = PackageManager.PERMISSION_GRANTED;
         boolean showRequestPermissions = false;
         for(String permissions:requestedPermissions)
+
         {
             permissionCheck += ContextCompat.checkSelfPermission(this, permissions);
             showRequestPermissions = showRequestPermissions || ActivityCompat.shouldShowRequestPermissionRationale(this, permissions);

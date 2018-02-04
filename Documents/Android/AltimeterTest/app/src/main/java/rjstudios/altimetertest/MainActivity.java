@@ -50,7 +50,7 @@ public class MainActivity extends AbsRuntimePermission {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == Sensor.TYPE_AMBIENT_TEMPERATURE || requestCode == Sensor.TYPE_PRESSURE){
             if(resultCode == Activity.RESULT_OK) {
-                //Toast.makeText(this,Toast.LENGTH_LONG).show();
+                /*Toast.makeText(this,"Text",Toast.LENGTH_LONG).show();*/
                 //float temperatureData = -99999f;
                 float pressureData = -1f; //arbitrary initialization. The input in next line in uncertain FIX
                 if(requestCode == Sensor.TYPE_PRESSURE) {
