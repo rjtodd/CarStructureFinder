@@ -3,6 +3,8 @@ package rjstudios.altimetertest;
 
 
 import android.app.Service;
+import android.content.Intent;
+import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -31,6 +33,8 @@ public class SensorFragment extends Fragment implements SensorEventListener{
     private SensorManager mSensorManager = null;
     int mSensorType = Sensor.TYPE_PRESSURE;
     public static final String SENSOR_MESSAGE = "Sensor type";
+    //public static final String SENSOR_FRAG = "Fragment Intent";
+    public boolean fragmentIntent = false;
     float pressData = -1f;
     TextView pressView;
 
@@ -47,6 +51,12 @@ public class SensorFragment extends Fragment implements SensorEventListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /*View view = inflater.inflate(R.layout.activity_maps, container, false);
+        Typeface myTypeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/COOPPBL.TTF");
+        TextView tv = (TextView) view.findViewById(R.id.sensor_text);
+        tv.setTypeface(myTypeface);*/
+
+
         //Intent intent = getIntent();
         //mSensorType = intent.getIntExtra(SENSOR_MESSAGE, mSensorType); //sensor type is received here
         //mSensorManager = (SensorManager) getSystemService(Service.SENSOR_SERVICE);
@@ -86,7 +96,7 @@ public class SensorFragment extends Fragment implements SensorEventListener{
         float press = MainActivity.HE.calcHeightPress();
         String message;
         if (press < 0){
-            message = "Go UP by: " + press + 'm';
+            message = "Go UP by: " + press * -1 + 'm';
         }
         else if (press > 0){
             message = "Go DOWN by: " + press + 'm';

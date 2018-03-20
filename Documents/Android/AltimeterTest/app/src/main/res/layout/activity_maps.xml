@@ -6,10 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="rjstudios.altimetertest.MapsActivity">
+
     <fragment
-    class="rjstudios.altimetertest.SensorFragment"
-    android:id="@+id/sensor_frag"
-    android:layout_width="94dp"
-    android:layout_height="528dp" />
+        android:id="@+id/sensor_frag"
+        class="rjstudios.altimetertest.SensorFragment"
+        android:layout_width="94dp"
+        android:layout_height="528dp"
+        tools:layout="@layout/fragment_sensor" />
 
 </fragment>

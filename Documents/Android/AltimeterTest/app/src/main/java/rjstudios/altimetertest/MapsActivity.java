@@ -4,6 +4,7 @@ import android.*;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -33,6 +34,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 import java.util.List;
 
+import static rjstudios.altimetertest.MainActivity.carLocation;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
@@ -40,13 +43,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     // Keys for storing activity state.
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
+    public static final String INTENT_RESULT = "Map for initial result";
 
     private GoogleMap mMap;
 
+    static LatLng carLatLng;
     private Location mLastKnownLocation, mLocation;
     private LocationManager manager;
     private LocationListener locationListener;
 
+    static boolean initialIntent = false;
     private boolean mLocationPermissionGranted;
     private boolean mRequestingLocationUpdates;
     private LocationCallback mLocationCallback;
@@ -59,6 +65,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        final Intent intent = getIntent();
+        double tempCoord[] = new double[2];
+        tempCoord = intent.getDoubleArrayExtra(MainActivity.MAP_CAR_LOCATION_INTENT);
+        carLatLng = new LatLng(tempCoord[0], tempCoord[1]);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -79,19 +90,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onLocationChanged(Location location) {
                 //get lat long  from location
+                double latitude, longitude;
+                //initialIntent = false;
                 mMap.clear();
-                double latitude = location.getLatitude();
-                double longitude = location.getLongitude();
+                if (MainActivity.carLocation != null) {
+                    LatLng latlongCar = new LatLng(MainActivity.carLocation.getLatitude(), MainActivity.carLocation.getLongitude());
+                    mMap.addMarker(new MarkerOptions().position(latlongCar).title("Car"));
+                }
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
                 Geocoder geocoder = new Geocoder(getApplicationContext());
-                /*List<Address> addresses =
+                    /*List<Address> addresses =
                         geocoder.getFromLocation(latitude, longitude, 1);
-                String result = addresses.get(0).getSubLocality()+":";
-                result += addresses.get(0).getLocality()+":";
-                result += addresses.get(0).getCountryCode();*/
+                    String result = addresses.get(0).getSubLocality()+":";
+                    result += addresses.get(0).getLocality()+":";
+                    result += addresses.get(0).getCountryCode();*/
                 LatLng latLng = new LatLng(latitude, longitude);
+                mMap.addMarker(new MarkerOptions().position(carLatLng).title("car"));
                 mMap.addMarker(new MarkerOptions().position(latLng).title("marker"));
-                mMap.setMaxZoomPreference(20);
+                mMap.setMaxZoomPreference(15);
+                mMap.setMinZoomPreference(10);
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+
+
             }
 
             @Override
