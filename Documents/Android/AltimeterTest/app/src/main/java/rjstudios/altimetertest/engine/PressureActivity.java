@@ -26,7 +26,7 @@ public class PressureActivity extends AppCompatActivity implements SensorEventLi
         mSensorManager = (SensorManager) getSystemService(Service.SENSOR_SERVICE);
         Sensor mSensor = mSensorManager.getDefaultSensor(mSensorType); //Initialize for specifies sensor type
         if(mSensor == null) //check if user has this sensor
-            Toast.makeText(this, "You don't have the necessary sensor" , Toast.LENGTH_SHORT).show();
+
         mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_UI);
     }
 

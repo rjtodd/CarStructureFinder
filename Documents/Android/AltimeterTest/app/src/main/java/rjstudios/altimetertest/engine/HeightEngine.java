@@ -33,6 +33,7 @@ public class HeightEngine
     Vector<Float> pressureAir = new Vector<>(); //atmospheric pressure
     Vector<Float> pressurePhone = new Vector<>(); //pressure from the phone  THIS IS MEASURED IN hPa   1hPa = 100Pa
 
+
     public HeightEngine()
     {
         pressureAir.add(-1f);
@@ -67,6 +68,10 @@ public class HeightEngine
         this.pressurePhone.set(location, pressurePhone);
     }
 
+    public float getBeforePhonePressure() {return this.pressurePhone.get(BEFORE);}
+
+    public float getAfterPhonePressure() {return this.pressurePhone.get(AFTER);}
+
 
     private Vector<Float> heightDif;
     private double aveHeight;
@@ -86,6 +91,9 @@ public class HeightEngine
     public float calcHeightPress(){
         return (pressurePhone.get(BEFORE) - pressurePhone.get(AFTER)) / DENSITY_AIR_GENERAL / GRAVITY;
     }
+     public float calcHeightPress(float press){
+         return (pressurePhone.get(BEFORE) - press) / DENSITY_AIR_GENERAL / GRAVITY;
+     }
 
     public double getAveHeight()
     {

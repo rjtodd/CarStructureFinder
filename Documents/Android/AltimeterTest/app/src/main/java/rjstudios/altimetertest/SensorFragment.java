@@ -19,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import java.text.DecimalFormat;
+
 import static rjstudios.altimetertest.engine.PressureActivity.SENSOR_MESSAGE;
 
 
@@ -27,44 +29,19 @@ import static rjstudios.altimetertest.engine.PressureActivity.SENSOR_MESSAGE;
  */
 public class SensorFragment extends Fragment implements SensorEventListener{
 
-    private long sensorId;
-    protected boolean flag = false;
-    private ListView listview;
+    private final float METER_TO_FEET_CONVERSION = 3.28084f;
     private SensorManager mSensorManager = null;
-    int mSensorType = Sensor.TYPE_PRESSURE;
-    public static final String SENSOR_MESSAGE = "Sensor type";
-    //public static final String SENSOR_FRAG = "Fragment Intent";
-    public boolean fragmentIntent = false;
     float pressData = -1f;
-    TextView pressView;
 
     public SensorFragment() {
         // Required empty public constructor
     }
 
-    public void setSensor(long id)
-    {
-        this.sensorId = id;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*View view = inflater.inflate(R.layout.activity_maps, container, false);
-        Typeface myTypeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/COOPPBL.TTF");
-        TextView tv = (TextView) view.findViewById(R.id.sensor_text);
-        tv.setTypeface(myTypeface);*/
-
-
-        //Intent intent = getIntent();
-        //mSensorType = intent.getIntExtra(SENSOR_MESSAGE, mSensorType); //sensor type is received here
-        //mSensorManager = (SensorManager) getSystemService(Service.SENSOR_SERVICE);
-
-        //View view = inflater.inflate(R.layout.fragment_sensor, container, false);
-        //listview = (ListView) getActivity().findViewById(R.id.sensor_text);
-        //listview.setAdapter(adapter);
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_sensor, container, false);
     }
 
@@ -75,9 +52,8 @@ public class SensorFragment extends Fragment implements SensorEventListener{
         View view = getView();
         if(view != null)
         {
-            TextView pressView = (TextView) view.findViewById(R.id.sensor_text);
+            TextView pressView = view.findViewById(R.id.sensor_text);
             pressView.setText(R.string.sensor_frag_text);
-            //pressData((CharSequence) pressData);
             mSensorManager = (SensorManager) this.getActivity().getSystemService(Service.SENSOR_SERVICE);
             Sensor mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE); //Initialize for specifies sensor type
             if(mSensor == null) //check if user has this sensor
@@ -92,20 +68,21 @@ public class SensorFragment extends Fragment implements SensorEventListener{
         pressData = event.values[0];
         MainActivity.HE.setPressurePhone(pressData, MainActivity.HE.getAFTER());
         View view = getView();
-        TextView pressView = (TextView) view.findViewById(R.id.sensor_text);
-        float press = MainActivity.HE.calcHeightPress();
+        DecimalFormat df = new DecimalFormat("###.##");
+        TextView pressView = view.findViewById(R.id.sensor_text);
+        float press = MainActivity.HE.calcHeightPress(pressData);
+        float pressFT = press * METER_TO_FEET_CONVERSION;
         String message;
         if (press < 0){
-            message = "Go UP by: " + press * -1 + 'm';
+            message = "Go UP by: " + df.format(pressFT * -1 ) + "ft";
         }
         else if (press > 0){
-            message = "Go DOWN by: " + press + 'm';
+            message = "Go DOWN by: " + df.format(pressFT) + "ft";
         }
         else{
             message = "Did not change";
         }
         pressView.setText(message);
-        //Toast.makeText(this.getActivity(), "P: " + event.values[0], Toast.LENGTH_SHORT).show();
     }
 
     @Override

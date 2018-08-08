@@ -25,6 +25,8 @@ public class SensorPermission extends AbsRuntimePermission {
                 R.string.Permission_Text, REQUEST_PERMISSION);
     }
 
+
+
     @Override
     public void onPermissionGranted(int requestCode) {
 

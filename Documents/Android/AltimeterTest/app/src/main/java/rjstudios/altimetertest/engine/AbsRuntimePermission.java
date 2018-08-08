@@ -39,6 +39,8 @@ public abstract class AbsRuntimePermission extends Activity{
         mPressure = mSensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);*/
     }
 
+    //protected abstract void onPause(Bundle savedInstanceState);
+
     public abstract void onPermissionGranted(int requestCode);
 
 

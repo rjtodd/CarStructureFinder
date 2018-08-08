@@ -94,7 +94,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 //initialIntent = false;
                 mMap.clear();
                 if (MainActivity.carLocation != null) {
-                    LatLng latlongCar = new LatLng(MainActivity.carLocation.getLatitude(), MainActivity.carLocation.getLongitude());
+                    LatLng latlongCar = MainActivity.carLL;
                     mMap.addMarker(new MarkerOptions().position(latlongCar).title("Car"));
                 }
                 latitude = location.getLatitude();
@@ -106,10 +106,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     result += addresses.get(0).getLocality()+":";
                     result += addresses.get(0).getCountryCode();*/
                 LatLng latLng = new LatLng(latitude, longitude);
-                mMap.addMarker(new MarkerOptions().position(carLatLng).title("car"));
-                mMap.addMarker(new MarkerOptions().position(latLng).title("marker"));
-                mMap.setMaxZoomPreference(15);
-                mMap.setMinZoomPreference(10);
+                mMap.addMarker(new MarkerOptions().position(MainActivity.carLL).title("car"));
+                mMap.addMarker(new MarkerOptions().position(latLng).title("you"));
+                mMap.setMaxZoomPreference(20);
+                mMap.setMinZoomPreference(15);
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
 
