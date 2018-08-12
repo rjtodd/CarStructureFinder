@@ -10,6 +10,7 @@
         android:id="@+id/sensor_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="CALCULATIONS" />
+        style="@android:style/TextAppearance.Medium"
+        android:text="CALCULATIONS"/>
 
 </LinearLayout>

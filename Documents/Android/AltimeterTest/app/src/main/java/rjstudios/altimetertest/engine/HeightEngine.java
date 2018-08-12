@@ -92,7 +92,7 @@ public class HeightEngine
         return (pressurePhone.get(BEFORE) - pressurePhone.get(AFTER)) / DENSITY_AIR_GENERAL / GRAVITY;
     }
      public float calcHeightPress(float press){
-         return (pressurePhone.get(BEFORE) - press) / DENSITY_AIR_GENERAL / GRAVITY;
+         return ((pressurePhone.get(BEFORE) - press) / DENSITY_AIR_GENERAL / GRAVITY * 100);
      }
 
     public double getAveHeight()
