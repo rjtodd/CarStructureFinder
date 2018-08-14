@@ -74,10 +74,10 @@ public class SensorFragment extends Fragment implements SensorEventListener{
         float pressFT = press * METER_TO_FEET_CONVERSION;
         String message;
         if (press < 0){
-            message = "Go UP by: " + df.format(pressFT * -1 ) + "ft";
+            message = "Go UP by: " + df.format(pressFT * -1 ) + "ft ";
         }
         else if (press > 0){
-            message = "Go DOWN by: " + df.format(pressFT) + "ft";
+            message = "Go DOWN by: " + df.format(pressFT) + "ft ";
         }
         else{
             message = "Did not change";
