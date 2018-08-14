@@ -36,7 +36,7 @@ public class MainActivity extends AbsRuntimePermission {
     static Location carLocation;
     public static String MAP_RETURN_INTENT = "Map return intent";
     public static String MAP_CAR_LOCATION_INTENT = "Coordinates for the car";
-    static int PRESSURE_CONVERSION = 100; // converter the hPa to Pascal
+    static int PRESSURE_CONVERSION = 100; // converter the hPa to Pascal to keep SI
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -216,22 +216,4 @@ public class MainActivity extends AbsRuntimePermission {
         i.putExtra(PressureActivity.SENSOR_MESSAGE, SENSOR_TYPE);
         startActivityForResult(i,SENSOR_TYPE);
     }
-    //===============INTENT STARTERS=======================//
-
-    public void resultDialog(){
-        float press = HE.calcHeightPress();
-        String message;
-        if (press < 0){
-            message = "Decreased by: " + press + 'm';
-        }
-        else if (press > 0){
-            message = "Increased by: " + press + 'm';
-        }
-        else{
-            message = "Did not change";
-        }
-        textView.setText(message);
-    }
-
-
 }
