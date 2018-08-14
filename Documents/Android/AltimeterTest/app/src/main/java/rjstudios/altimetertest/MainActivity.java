@@ -23,6 +23,8 @@ import rjstudios.altimetertest.engine.HeightEngine;
 import rjstudios.altimetertest.engine.LocationActivity;
 import rjstudios.altimetertest.engine.PressureActivity;
 
+//CLEAN UP THIS DAMN CODE IT'S A MESS
+
 
 public class MainActivity extends AbsRuntimePermission {
     //public static Address carLocation;
@@ -194,9 +196,6 @@ public class MainActivity extends AbsRuntimePermission {
         startLocationResultIntent(MAP_ACTIVITY_CODE);
         startSensorIntent(Sensor.TYPE_PRESSURE);
     }
-
-    //===============ON CLICK LISTENERS====================//
-
 
     //===============INTENT STARTERS=======================//
     public void startLocationResultIntent(int mapCode){
