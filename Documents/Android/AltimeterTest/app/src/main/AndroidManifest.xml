@@ -22,7 +22,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".engine.PressureActivity" />
-        <activity android:name=".engine.LocationActivity"/>
+        <activity android:name=".engine.LocationActivity" />
+        <activity android:name=".engine.WeatherActivity" />
+
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -51,7 +53,6 @@
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

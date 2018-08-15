@@ -22,6 +22,8 @@ import rjstudios.altimetertest.engine.AbsRuntimePermission;
 import rjstudios.altimetertest.engine.HeightEngine;
 import rjstudios.altimetertest.engine.LocationActivity;
 import rjstudios.altimetertest.engine.PressureActivity;
+import rjstudios.altimetertest.engine.WeatherActivity;
+import rjstudios.altimetertest.engine.WeatherClient;
 
 //CLEAN UP THIS DAMN CODE IT'S A MESS
 
@@ -31,10 +33,11 @@ public class MainActivity extends AbsRuntimePermission {
     TextView textView;
     private static final int REQUEST_PERMISSION = 10; //not too sure why this is 10 so be careful
     public static final int MAP_ACTIVITY_CODE= 123456790; //random number to appease returnIntent for the map
+    public static final int WEATHER_ACTIVITY_CODE = 876543210; //random number to appease returnIntent for the weather
     static HeightEngine HE;
     static int LOCATION = -1;
     static double carCoordinate[];
-    static LatLng carLL;
+    public static LatLng carLL;
     static Location carLocation;
     public static String MAP_RETURN_INTENT = "Map return intent";
     public static String MAP_CAR_LOCATION_INTENT = "Coordinates for the car";
@@ -119,7 +122,7 @@ public class MainActivity extends AbsRuntimePermission {
         editor.putFloat("Pressure", HE.getBeforePhonePressure());
         editor.commit();
         //Toast.makeText(this, "saving: " + carLL.toString(), Toast.LENGTH_LONG).show();
-        textView.setText("Saving: " + carLL.toString() );
+        //textView.setText("Saving: " + carLL.toString() );
     }
     //LOAD FUNCTION
     private void loadData(){
@@ -169,7 +172,7 @@ public class MainActivity extends AbsRuntimePermission {
                 double coord[] = new double[2];
                 carCoordinate = data.getDoubleArrayExtra("location");
                 carLL = new LatLng(carCoordinate[0], carCoordinate[1]);
-                textView.setText(carLL.toString());
+                //textView.setText(carLL.toString());
                 saveData();
                 //carLocation = data.getParcelableExtra(MAP_RETURN_INTENT);
                 //location = data.getBundleExtra()
@@ -177,6 +180,15 @@ public class MainActivity extends AbsRuntimePermission {
             }
             else {
                 //Toast.makeText(this, "Location Failed" , Toast.LENGTH_SHORT).show();
+            }
+        }
+        else if (requestCode == WEATHER_ACTIVITY_CODE) {
+            if(resultCode == Activity.RESULT_OK){
+                double temp = -1;
+                textView.setText("" + data.getDoubleExtra("weather", temp));
+            }
+            else {
+                textView.setText("Failed to get weather info");
             }
         }
     }
@@ -187,14 +199,17 @@ public class MainActivity extends AbsRuntimePermission {
         startSensorIntent(Sensor.TYPE_PRESSURE);
     }*/
 
-    public void MapActivity(View view){
-        //HE.setPressurePhone(,HE.getBEFORE());
-        startMapIntent();
-    }
-
+    //MARK THE CAR (BEFORE)
     public void startMapResult(View view){
         startLocationResultIntent(MAP_ACTIVITY_CODE);
         startSensorIntent(Sensor.TYPE_PRESSURE);
+        startWeatherIntent(WEATHER_ACTIVITY_CODE);
+    }
+
+    //LOCATE THE CAR (AFTER)
+    public void MapActivity(View view){
+        //HE.setPressurePhone(,HE.getBEFORE());
+        startMapIntent();
     }
 
     //===============INTENT STARTERS=======================//
@@ -214,5 +229,11 @@ public class MainActivity extends AbsRuntimePermission {
         Intent i = new Intent(MainActivity.this, PressureActivity.class);
         i.putExtra(PressureActivity.SENSOR_MESSAGE, SENSOR_TYPE);
         startActivityForResult(i,SENSOR_TYPE);
+    }
+
+    public void startWeatherIntent(int weatherCode){
+        Intent intent = new Intent(MainActivity.this, WeatherActivity.class);
+        intent.putExtra("location", carCoordinate);
+        startActivityForResult(intent, weatherCode);
     }
 }

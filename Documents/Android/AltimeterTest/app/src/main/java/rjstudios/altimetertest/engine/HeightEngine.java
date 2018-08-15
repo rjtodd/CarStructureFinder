@@ -1,8 +1,5 @@
 package rjstudios.altimetertest.engine;
 
-import android.app.Activity;
-
-import java.util.ArrayList;
 import java.util.Vector;
 
 import rjstudios.altimetertest.classes.MapData;

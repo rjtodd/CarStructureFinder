@@ -1,5 +1,7 @@
 package rjstudios.altimetertest.engine;
 
+import android.content.Intent;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -11,28 +13,25 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 
+import rjstudios.altimetertest.MainActivity;
 import rjstudios.altimetertest.R;
 
 /**
  * Created by Ronan on 7/19/2017.
  */
-/*
-ublic class OwmJapisExample1 {
 
-    public static void main(String[] args)
-            throws APIException {
+public class WeatherClient {
 
-        // declaring object of "OWM" class
-        OWM owm = new OWM("YOUR-API-KEY-HERE");
-
-        // getting current weather data for the "London" city
-        CurrentWeather cwd = owm.currentWeatherByCityName("London");
-
-        //printing city name from the retrieved data
-        System.out.println("City: " + cwd.getCityName());
-
-        // printing the max./min. temperature
-        System.out.println("Temperature: " + cwd.getMainData().getTempMax()
-                + "/" + cwd.getMainData().getTempMin() + "\'K");
+    double[] latLng;
+    public WeatherClient() {
+        //TO-DO
+        latLng= new double[2];
+        //Intent intent = getIntent();
+        //latLng = intent.getDoubleArrayExtra("Weather");
     }
-}*/
+
+    public void getPressure() {
+        String url = "api.openweathermap.org/data/2.5/weather?lat={" + "}&lon={lon}";
+
+    }
+}
