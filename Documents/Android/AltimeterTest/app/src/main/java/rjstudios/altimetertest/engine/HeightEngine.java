@@ -53,16 +53,16 @@ public class HeightEngine
         return pressureAir;
     }
 
-    public void setPressureAir(int location, float pressureAir) {
-        this.pressureAir.set(location, pressureAir);
+    public void setPressureAir(int position, float pressureAir) {
+        this.pressureAir.set(position, pressureAir);
     }
 
     public Vector<Float> getPressurePhone() {
         return pressurePhone;
     }
 
-    public void setPressurePhone(float pressurePhone, int location) {
-        this.pressurePhone.set(location, pressurePhone);
+    public void setPressurePhone(float pressurePhone, int position) {
+        this.pressurePhone.set(position, pressurePhone);
     }
 
     public float getBeforePhonePressure() {return this.pressurePhone.get(BEFORE);}
@@ -89,7 +89,7 @@ public class HeightEngine
         return (pressurePhone.get(BEFORE) - pressurePhone.get(AFTER)) / DENSITY_AIR_GENERAL / GRAVITY;
     }
      public float calcHeightPress(float press){
-         return ((pressurePhone.get(BEFORE) - press) / DENSITY_AIR_GENERAL / GRAVITY * 100);
+         return ((pressurePhone.get(BEFORE) - press /*+ pressureAir.get(BEFORE) - pressureAir.get(AFTER)*/) / DENSITY_AIR_GENERAL / GRAVITY * 100);
      }
 
     public double getAveHeight()

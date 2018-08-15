@@ -32,8 +32,8 @@ public class MainActivity extends AbsRuntimePermission {
     //public static Address carLocation;
     TextView textView;
     private static final int REQUEST_PERMISSION = 10; //not too sure why this is 10 so be careful
-    public static final int MAP_ACTIVITY_CODE= 123456790; //random number to appease returnIntent for the map
-    public static final int WEATHER_ACTIVITY_CODE = 876543210; //random number to appease returnIntent for the weather
+    public static final int MAP_ACTIVITY_CODE= 123456; //random number to appease returnIntent for the map
+    public static final int WEATHER_ACTIVITY_CODE = 43210; //random number to appease returnIntent for the weather
     static HeightEngine HE;
     static int LOCATION = -1;
     static double carCoordinate[];
@@ -184,8 +184,10 @@ public class MainActivity extends AbsRuntimePermission {
         }
         else if (requestCode == WEATHER_ACTIVITY_CODE) {
             if(resultCode == Activity.RESULT_OK){
-                double temp = -1;
-                textView.setText("" + data.getDoubleExtra("weather", temp));
+                double temp = -1; 
+                temp = data.getDoubleExtra("weather", temp);
+                HE.setPressureAir(HE.getBEFORE(), ((float) temp));
+                //textView.setText("" + data.getDoubleExtra("weather", temp));
             }
             else {
                 textView.setText("Failed to get weather info");
@@ -203,12 +205,13 @@ public class MainActivity extends AbsRuntimePermission {
     public void startMapResult(View view){
         startLocationResultIntent(MAP_ACTIVITY_CODE);
         startSensorIntent(Sensor.TYPE_PRESSURE);
-        startWeatherIntent(WEATHER_ACTIVITY_CODE);
+        startWeatherIntent(WEATHER_ACTIVITY_CODE, HE.getBEFORE());
     }
 
     //LOCATE THE CAR (AFTER)
     public void MapActivity(View view){
         //HE.setPressurePhone(,HE.getBEFORE());
+        startWeatherIntent(WEATHER_ACTIVITY_CODE, HE.getAFTER());
         startMapIntent();
     }
 
@@ -231,9 +234,10 @@ public class MainActivity extends AbsRuntimePermission {
         startActivityForResult(i,SENSOR_TYPE);
     }
 
-    public void startWeatherIntent(int weatherCode){
+    public void startWeatherIntent(int weatherCode, int position){
         Intent intent = new Intent(MainActivity.this, WeatherActivity.class);
         intent.putExtra("location", carCoordinate);
+        intent.putExtra("position", position);
         startActivityForResult(intent, weatherCode);
     }
 }

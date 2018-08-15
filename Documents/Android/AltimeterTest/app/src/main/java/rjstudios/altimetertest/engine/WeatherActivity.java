@@ -29,13 +29,13 @@ import rjstudios.altimetertest.R;
 public class WeatherActivity extends AppCompatActivity {
 
     public double press;
-    TextView textView;
+    //TextView textView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_weather);
-        textView = (TextView) findViewById(R.id.WeatherText);
-        textView.setText("It booted up");
+        //setContentView(R.layout.activity_weather);
+        //textView = (TextView) findViewById(R.id.WeatherText);
+        //textView.setText("It booted up");
         Intent intent = getIntent();
         double[] temp = new double[2];
         temp = intent.getDoubleArrayExtra("location");
@@ -59,18 +59,18 @@ public class WeatherActivity extends AppCompatActivity {
                             press = mainObject.getDouble("pressure");
                             returnIntent.putExtra("weather",press);
                             //Toast.makeText(MainActivity.class,"JSON Parsing", Toast.LENGTH_LONG).show();
-                            textView.setText("Pressure: " + press);
+                            //textView.setText("Pressure: " + press);
                             setResult(Activity.RESULT_OK, returnIntent);
                             finish();
                         }catch (JSONException e){
-                            textView.setText("This failed");
+                            //textView.setText("This failed");
                             e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                textView.setText("ErrorResponse");
+                //textView.setText("ErrorResponse");
                 setResult(Activity.RESULT_CANCELED, returnIntent);
                 finish();
             }

@@ -2,6 +2,7 @@ package rjstudios.altimetertest;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -26,6 +27,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import rjstudios.altimetertest.engine.WeatherActivity;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -57,6 +60,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
 
         final Intent intent = getIntent();
+       /* Intent weatherIntent= new Intent(MapsActivity.this, WeatherActivity.class);
+        weatherIntent.putExtra("location", MainActivity.carCoordinate);
+        startActivityForResult(weatherIntent, MainActivity.WEATHER_ACTIVITY_CODE);*/
         double tempCoord[] = new double[2];
         tempCoord = intent.getDoubleArrayExtra(MainActivity.MAP_CAR_LOCATION_INTENT);
         carLatLng = new LatLng(tempCoord[0], tempCoord[1]);
@@ -118,6 +124,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
     }
+
+    /*@Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == MainActivity.WEATHER_ACTIVITY_CODE){
+            if(resultCode == Activity.RESULT_OK){
+                double temp = -1;
+                MainActivity.HE.setPressureAir(MainActivity.HE.getAFTER(), ((float) data.getDoubleExtra("weather", temp)));
+            }
+        }
+    }*/
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
