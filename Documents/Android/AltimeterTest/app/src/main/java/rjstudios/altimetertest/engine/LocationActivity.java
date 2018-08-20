@@ -34,6 +34,8 @@ public class LocationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
+        int temp = -1;
+        final int position = intent.getIntExtra("position", temp);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         final Intent returnIntent = new Intent();
         mFusedLocationClient.getLastLocation()
@@ -45,6 +47,7 @@ public class LocationActivity extends AppCompatActivity {
                             //DATA[0] == LAT && DATA[1] == LONG
                             double[] data = new double[]{location.getLatitude(), location.getLongitude()};
                             returnIntent.putExtra("location", data);
+                            returnIntent.putExtra("position", position);
                             setResult(Activity.RESULT_OK, returnIntent);
                             finish();
                         }

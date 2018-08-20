@@ -184,9 +184,13 @@ public class MainActivity extends AbsRuntimePermission {
         }
         else if (requestCode == WEATHER_ACTIVITY_CODE) {
             if(resultCode == Activity.RESULT_OK){
-                double temp = -1; 
-                temp = data.getDoubleExtra("weather", temp);
-                HE.setPressureAir(HE.getBEFORE(), ((float) temp));
+                Bundle bundle = data.getBundleExtra("returnBundle");
+                double temp = bundle.getDouble("pressure");
+                int position = bundle.getInt("position");
+                HE.setPressureAir(position, ((float) temp));
+                if (position == HE.getAFTER()){
+                    startMapIntent();
+                }
                 //textView.setText("" + data.getDoubleExtra("weather", temp));
             }
             else {
@@ -212,7 +216,10 @@ public class MainActivity extends AbsRuntimePermission {
     public void MapActivity(View view){
         //HE.setPressurePhone(,HE.getBEFORE());
         startWeatherIntent(WEATHER_ACTIVITY_CODE, HE.getAFTER());
-        startMapIntent();
+
+        //changing the order of intent calling in order to specify weather info for locating car
+        //this will be called in the onIntentReturn() function and will be passed a boolean to check
+        //startMapIntent();
     }
 
     //===============INTENT STARTERS=======================//
@@ -233,11 +240,13 @@ public class MainActivity extends AbsRuntimePermission {
         i.putExtra(PressureActivity.SENSOR_MESSAGE, SENSOR_TYPE);
         startActivityForResult(i,SENSOR_TYPE);
     }
-
+    //ARRAY POSITION TO INDICATE BEFORE OR AFTER
     public void startWeatherIntent(int weatherCode, int position){
         Intent intent = new Intent(MainActivity.this, WeatherActivity.class);
-        intent.putExtra("location", carCoordinate);
-        intent.putExtra("position", position);
+        Bundle bundle = new Bundle();
+        bundle.putDoubleArray("location", carCoordinate);
+        bundle.putInt("position", position);
+        intent.putExtra("bundle", bundle);
         startActivityForResult(intent, weatherCode);
     }
 }

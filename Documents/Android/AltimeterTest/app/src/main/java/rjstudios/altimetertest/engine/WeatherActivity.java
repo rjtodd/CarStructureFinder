@@ -29,6 +29,7 @@ import rjstudios.altimetertest.R;
 public class WeatherActivity extends AppCompatActivity {
 
     public double press;
+    static int position = -1; //THIS IS TO PASS ON THE ARRAY POSITION TO DETERMINE BEFORE OR AFTER FOR LOCATING THE CAR
     //TextView textView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,14 +38,17 @@ public class WeatherActivity extends AppCompatActivity {
         //textView = (TextView) findViewById(R.id.WeatherText);
         //textView.setText("It booted up");
         Intent intent = getIntent();
-        double[] temp = new double[2];
-        temp = intent.getDoubleArrayExtra("location");
+        Bundle bundle = intent.getBundleExtra("bundle");
+        double[] temp = bundle.getDoubleArray("location");
+        position = bundle.getInt("position");
+        //temp = intent.getDoubleArrayExtra("location");
         getWeather("" + temp[0],"" + temp[1]);
 
     }
 
     public void getWeather(String lat, String longt){
         final Intent returnIntent = new Intent();
+        final Bundle returnBundle= new Bundle();
         press = 0;
       /*  String lat = "" + MainActivity.carLL.latitude;
         String longt = "" + MainActivity.carLL.longitude;*/
@@ -57,7 +61,10 @@ public class WeatherActivity extends AppCompatActivity {
                         try {
                             JSONObject mainObject = response.getJSONObject("main");
                             press = mainObject.getDouble("pressure");
-                            returnIntent.putExtra("weather",press);
+                            returnBundle.putDouble("pressure", press);
+                            returnBundle.putInt("position", position);
+                            returnIntent.putExtra("returnBundle", returnBundle);
+                            //returnIntent.putExtra("weather",press);
                             //Toast.makeText(MainActivity.class,"JSON Parsing", Toast.LENGTH_LONG).show();
                             //textView.setText("Pressure: " + press);
                             setResult(Activity.RESULT_OK, returnIntent);

@@ -88,8 +88,8 @@ public class HeightEngine
     public float calcHeightPress(){
         return (pressurePhone.get(BEFORE) - pressurePhone.get(AFTER)) / DENSITY_AIR_GENERAL / GRAVITY;
     }
-     public float calcHeightPress(float press){
-         return ((pressurePhone.get(BEFORE) - press /*+ pressureAir.get(BEFORE) - pressureAir.get(AFTER)*/) / DENSITY_AIR_GENERAL / GRAVITY * 100);
+     public float calcHeightPress(float pressurePhoneAfter){
+         return ((pressurePhone.get(BEFORE) - pressurePhoneAfter + pressureAir.get(BEFORE) - pressureAir.get(AFTER)) / DENSITY_AIR_GENERAL / GRAVITY * 100);
      }
 
     public double getAveHeight()
