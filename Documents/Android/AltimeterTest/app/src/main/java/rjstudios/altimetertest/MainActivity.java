@@ -1,14 +1,11 @@
 package rjstudios.altimetertest;
 
-import android.*;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
-import android.location.Address;
-import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -16,7 +13,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.ArrayList;
 
 import rjstudios.altimetertest.engine.AbsRuntimePermission;
 import rjstudios.altimetertest.engine.HeightEngine;
@@ -27,6 +23,8 @@ import rjstudios.altimetertest.engine.WeatherClient;
 
 //CLEAN UP THIS DAMN CODE IT'S A MESS
 
+//I'M WORKING ON IT
+
 
 public class MainActivity extends AbsRuntimePermission {
     //public static Address carLocation;
@@ -34,14 +32,12 @@ public class MainActivity extends AbsRuntimePermission {
     private static final int REQUEST_PERMISSION = 10; //not too sure why this is 10 so be careful
     public static final int MAP_ACTIVITY_CODE= 123456; //random number to appease returnIntent for the map
     public static final int WEATHER_ACTIVITY_CODE = 43210; //random number to appease returnIntent for the weather
-    static HeightEngine HE;
-    static int LOCATION = -1;
-    static double carCoordinate[];
-    public static LatLng carLL;
-    static Location carLocation;
-    public static String MAP_RETURN_INTENT = "Map return intent";
-    public static String MAP_CAR_LOCATION_INTENT = "Coordinates for the car";
-    static int PRESSURE_CONVERSION = 100; // converter the hPa to Pascal to keep SI
+    static HeightEngine HE; //This class does the math for calculating the height differences between the two recorded pressure data points
+    static double carCoordinate[]; //Array that holds the Lat in [0] and Long in [0] easier to pass in the intents
+    public static LatLng carLL; //Latitude and Longitude object for storing car location created for the MapsActivity and really only used there
+    public static String MAP_RETURN_INTENT = "Map return intent"; //This should be implemented once the car is located and something is done
+    public static String MAP_CAR_LOCATION_INTENT = "Coordinates for the car"; //Just a global instance for the map intent
+     public static int PRESSURE_CONVERSION = 100; // converter the hPa to Pascal to keep SI
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +47,6 @@ public class MainActivity extends AbsRuntimePermission {
         sFrag.setSensor(1);*/
         textView = (TextView) findViewById(R.id.TextView);
         HE = new HeightEngine();
-        LOCATION = HE.getBEFORE();
         carLL = new LatLng(-1, 1);
         carCoordinate = new double[2];
         //boolean myBoolean = false;
@@ -68,9 +63,6 @@ public class MainActivity extends AbsRuntimePermission {
             //loadData();
             e.printStackTrace();
         }
-
-
-
         requestAppPermission(new String[]{
                         android.Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -79,41 +71,7 @@ public class MainActivity extends AbsRuntimePermission {
                 R.string.Permission_Text, REQUEST_PERMISSION);
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-
-    }
-
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        // Restore UI state from the savedInstanceState.
-        // This bundle has also been passed to onCreate.
-        /*float myFloat = savedInstanceState.getFloat("myPressure");
-        boolean myBoolean = savedInstanceState.getBoolean("MyBoolean");
-
-        textView.setText("Last Pressure: " + myFloat);
-        HE.setPressurePhone(myFloat, HE.getBEFORE());
-        carCoordinate = savedInstanceState.getDoubleArray("myLocation");
-        carLL = new LatLng(carCoordinate[0], carCoordinate[1]);*/
-
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        //saveData();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        loadData();
-    }
-
-    //SAVE FUNCTION
+    //SAVE DATA FUNCTION
     private void saveData(){
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -124,7 +82,7 @@ public class MainActivity extends AbsRuntimePermission {
         //Toast.makeText(this, "saving: " + carLL.toString(), Toast.LENGTH_LONG).show();
         //textView.setText("Saving: " + carLL.toString() );
     }
-    //LOAD FUNCTION
+    //LOAD DATA FUNCTION
     private void loadData(){
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         carLL = new LatLng(sharedPreferences.getFloat("Latitude", (float) carLL.latitude),
@@ -143,7 +101,8 @@ public class MainActivity extends AbsRuntimePermission {
     {
 
     }
-    //AFTER PRESSURE ACTIVITY ENDS
+    //This function handles every intentForResult that returns and crunches the appropriate numbers
+    //for the appropriate needs
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Sensor.TYPE_AMBIENT_TEMPERATURE || requestCode == Sensor.TYPE_PRESSURE) {
@@ -168,15 +127,10 @@ public class MainActivity extends AbsRuntimePermission {
         }
         else if (requestCode == MAP_ACTIVITY_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                //Location location = new Location("String");
-                double coord[] = new double[2];
                 carCoordinate = data.getDoubleArrayExtra("location");
                 carLL = new LatLng(carCoordinate[0], carCoordinate[1]);
                 //textView.setText(carLL.toString());
                 saveData();
-                //carLocation = data.getParcelableExtra(MAP_RETURN_INTENT);
-                //location = data.getBundleExtra()
-                //location = data.getBundleExtra(MAP_RETURN_INTENT, location);
             }
             else {
                 //Toast.makeText(this, "Location Failed" , Toast.LENGTH_SHORT).show();
@@ -199,11 +153,7 @@ public class MainActivity extends AbsRuntimePermission {
         }
     }
 
-    //===============ON CLICK LISTENERS====================/
-    /*public void Before(View view) {
-        LOCATION = HE.getBEFORE();
-        startSensorIntent(Sensor.TYPE_PRESSURE);
-    }*/
+    //================ONCLICK LISTENERS===================//
 
     //MARK THE CAR (BEFORE)
     public void startMapResult(View view){
@@ -216,31 +166,25 @@ public class MainActivity extends AbsRuntimePermission {
     public void MapActivity(View view){
         //HE.setPressurePhone(,HE.getBEFORE());
         startWeatherIntent(WEATHER_ACTIVITY_CODE, HE.getAFTER());
-
         //changing the order of intent calling in order to specify weather info for locating car
         //this will be called in the onIntentReturn() function and will be passed a boolean to check
         //startMapIntent();
     }
 
     //===============INTENT STARTERS=======================//
+    //This one is for marking the location of the car in the beginning
     public void startLocationResultIntent(int mapCode){
         Intent intent = new Intent(MainActivity.this, LocationActivity.class);
         //intent.putExtra(MapsActivity.INTENT_RESULT,true);
         startActivityForResult(intent, mapCode);
     }
-
-    public void startMapIntent(){
-        Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-        intent.putExtra(MAP_CAR_LOCATION_INTENT, carCoordinate);
-        startActivity(intent);
-    }
-
+    //This one is for getting the pressure information when marking the car
     public void startSensorIntent(int SENSOR_TYPE) {
         Intent i = new Intent(MainActivity.this, PressureActivity.class);
         i.putExtra(PressureActivity.SENSOR_MESSAGE, SENSOR_TYPE);
         startActivityForResult(i,SENSOR_TYPE);
     }
-    //ARRAY POSITION TO INDICATE BEFORE OR AFTER
+    //int position is used to clarify whether this weather data is for marking or locating car
     public void startWeatherIntent(int weatherCode, int position){
         Intent intent = new Intent(MainActivity.this, WeatherActivity.class);
         Bundle bundle = new Bundle();
@@ -248,5 +192,11 @@ public class MainActivity extends AbsRuntimePermission {
         bundle.putInt("position", position);
         intent.putExtra("bundle", bundle);
         startActivityForResult(intent, weatherCode);
+    }
+    //This is for starting the Map to locate the car
+    public void startMapIntent(){
+        Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+        intent.putExtra(MAP_CAR_LOCATION_INTENT, carCoordinate);
+        startActivity(intent);
     }
 }

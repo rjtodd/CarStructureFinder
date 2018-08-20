@@ -34,27 +34,22 @@ public class WeatherActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_weather);
-        //textView = (TextView) findViewById(R.id.WeatherText);
-        //textView.setText("It booted up");
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("bundle");
         double[] temp = bundle.getDoubleArray("location");
         position = bundle.getInt("position");
         //temp = intent.getDoubleArrayExtra("location");
-        getWeather("" + temp[0],"" + temp[1]);
+        getWeather(temp[0], temp[1]);
 
     }
-
-    public void getWeather(String lat, String longt){
+    //The workhorse function that will get and parse the JSON from OWM and returns it
+    public void getWeather(double lat, double longt){
         final Intent returnIntent = new Intent();
         final Bundle returnBundle= new Bundle();
         press = 0;
-      /*  String lat = "" + MainActivity.carLL.latitude;
-        String longt = "" + MainActivity.carLL.longitude;*/
-        String url_2 = "http://api.openweathermap.org/data/2.5/weather?lat=34.052&lon=-118.04&APPID=30d4c6dc386cb72d7288dce7bb5d81e8";
-        String url = "http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + longt + "&" + R.string.weatherApi;
-        JsonObjectRequest jor = new JsonObjectRequest(Request.Method.GET, url_2, null,
+        String url_2 = "http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + longt + "&APPID=30d4c6dc386cb72d7288dce7bb5d81e8";
+        String url = "http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + longt + getResources().getString(R.string.weatherApi);
+        JsonObjectRequest jor = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {

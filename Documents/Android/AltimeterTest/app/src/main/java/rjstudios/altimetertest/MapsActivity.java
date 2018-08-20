@@ -60,9 +60,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
 
         final Intent intent = getIntent();
-       /* Intent weatherIntent= new Intent(MapsActivity.this, WeatherActivity.class);
-        weatherIntent.putExtra("location", MainActivity.carCoordinate);
-        startActivityForResult(weatherIntent, MainActivity.WEATHER_ACTIVITY_CODE);*/
+
         double tempCoord[] = new double[2];
         tempCoord = intent.getDoubleArrayExtra(MainActivity.MAP_CAR_LOCATION_INTENT);
         carLatLng = new LatLng(tempCoord[0], tempCoord[1]);
@@ -72,13 +70,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         manager = (LocationManager) getSystemService(LOCATION_SERVICE); // get location service
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
 
@@ -89,7 +80,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 double latitude, longitude;
                 //initialIntent = false;
                 mMap.clear();
-                if (MainActivity.carLocation != null) {
+                if (MainActivity.carLL != null) {
                     LatLng latlongCar = MainActivity.carLL;
                     mMap.addMarker(new MarkerOptions().position(latlongCar).title("Car"));
                 }
@@ -125,17 +116,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    /*@Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == MainActivity.WEATHER_ACTIVITY_CODE){
-            if(resultCode == Activity.RESULT_OK){
-                double temp = -1;
-                MainActivity.HE.setPressureAir(MainActivity.HE.getAFTER(), ((float) data.getDoubleExtra("weather", temp)));
-            }
-        }
-    }*/
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -168,13 +148,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void startLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         mFusedLocationClient.requestLocationUpdates(mLocationRequest, mPendingIntent);
@@ -209,25 +182,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         //updateLocationUI();
     }
-
-
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
-
-    /**
-     * Sets up the options menu.
-     //* @param menu The options menu.
-     * @return Boolean.
-     */
-
-
 
 }

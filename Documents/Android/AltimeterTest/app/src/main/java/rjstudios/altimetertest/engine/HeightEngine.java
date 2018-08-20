@@ -2,6 +2,7 @@ package rjstudios.altimetertest.engine;
 
 import java.util.Vector;
 
+import rjstudios.altimetertest.MainActivity;
 import rjstudios.altimetertest.classes.MapData;
 
 /**
@@ -10,8 +11,6 @@ import rjstudios.altimetertest.classes.MapData;
 
 public class HeightEngine
 {
-
-
     //----------------IMPORTANT--------------------//
     //----------EVERYTHING MUST BE IN SI UNITS-----//
     final int BEFORE = 0;
@@ -49,17 +48,11 @@ public class HeightEngine
     }
 
 
-    public Vector<Float> getPressureAir() {
-        return pressureAir;
-    }
 
     public void setPressureAir(int position, float pressureAir) {
         this.pressureAir.set(position, pressureAir);
     }
 
-    public Vector<Float> getPressurePhone() {
-        return pressurePhone;
-    }
 
     public void setPressurePhone(float pressurePhone, int position) {
         this.pressurePhone.set(position, pressurePhone);
@@ -67,46 +60,8 @@ public class HeightEngine
 
     public float getBeforePhonePressure() {return this.pressurePhone.get(BEFORE);}
 
-    public float getAfterPhonePressure() {return this.pressurePhone.get(AFTER);}
 
-
-    private Vector<Float> heightDif;
-    private double aveHeight;
-
-    //maybe make an array? filter through multiple data samples for accuracy?
-    //discard the data points that are destroying the average
-
-    public void calcAirDens(float temperature)
-    {
-
-    }
-
-    public float calcHeightTemp()
-    {
-        return IDEAL_GAS_CONSTANT * (temperaturePhone.get(BEFORE) - temperaturePhone.get(AFTER))/ MOLAR_MASS_AIR / GRAVITY;
-    }
-    public float calcHeightPress(){
-        return (pressurePhone.get(BEFORE) - pressurePhone.get(AFTER)) / DENSITY_AIR_GENERAL / GRAVITY;
-    }
      public float calcHeightPress(float pressurePhoneAfter){
-         return ((pressurePhone.get(BEFORE) - pressurePhoneAfter + pressureAir.get(BEFORE) - pressureAir.get(AFTER)) / DENSITY_AIR_GENERAL / GRAVITY * 100);
+         return ((pressurePhone.get(BEFORE) - pressurePhoneAfter + pressureAir.get(BEFORE) - pressureAir.get(AFTER)) / DENSITY_AIR_GENERAL / GRAVITY * MainActivity.PRESSURE_CONVERSION);
      }
-
-    public double getAveHeight()
-    {
-        return aveHeight;
-    }
-    public String toString()
-    {
-        String text = "";
-        text += "There are " + this.heightDif.size() + " of items in the list\n";
-        for(int i = 0; i < this.heightDif.size(); i++)
-        {
-            text += (i + 1) + "= " + this.heightDif.get(i) + '\n';
-        }
-        text += "The average is: " + aveHeight;
-        return text;
-    }
-
-
 }
