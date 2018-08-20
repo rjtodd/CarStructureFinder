@@ -21,10 +21,9 @@ import rjstudios.altimetertest.engine.PressureActivity;
 import rjstudios.altimetertest.engine.WeatherActivity;
 import rjstudios.altimetertest.engine.WeatherClient;
 
+//TO-DO
 //CLEAN UP THIS DAMN CODE IT'S A MESS
-
-//I'M WORKING ON IT
-
+//IMPLEMENT ERROR HANDLING FOR WHEN USER CANNOT CONNECT TO INTERNET AND GET WEATHER INFO
 
 public class MainActivity extends AbsRuntimePermission {
     //public static Address carLocation;
