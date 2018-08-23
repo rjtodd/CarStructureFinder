@@ -42,6 +42,7 @@ public class MainActivity extends AbsRuntimePermission {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //loadData();
         /*SensorFragment sFrag = (SensorFragment) getFragmentManager().findFragmentById(R.id.sensor_frag);
         sFrag.setSensor(1);*/
         textView = (TextView) findViewById(R.id.TextView);
@@ -70,13 +71,39 @@ public class MainActivity extends AbsRuntimePermission {
                 R.string.Permission_Text, REQUEST_PERMISSION);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+    }
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    //MUST KEEP THESE TWO OVERRIDES IN ORDER FOR DATA SAVING AND LOADING TO BE FUNCTIONAL
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //saveData();
+    }
+    //DO NOT DELETE
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadData();
+    }
+
+
     //SAVE DATA FUNCTION
+    //MAKE SURE TO UPDATE THIS EVERY TIME A NEW VARIABLE IS IMPLEMENTED INTO THE CODE
+    //FORGOT THE WEATHER AND GAVE ME A LONG HEADACHE
     private void saveData(){
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putFloat("Latitude", ((float) carLL.latitude));
         editor.putFloat("Longitude", ((float) carLL.longitude));
         editor.putFloat("Pressure", HE.getBeforePhonePressure());
+        editor.putFloat("Weather", HE.getPressureAir(HE.getBEFORE()));
         editor.commit();
         //Toast.makeText(this, "saving: " + carLL.toString(), Toast.LENGTH_LONG).show();
         //textView.setText("Saving: " + carLL.toString() );
@@ -91,6 +118,7 @@ public class MainActivity extends AbsRuntimePermission {
         /*float temp1 = -1;
         temp = sharedPreferences.getFloat("Pressure", temp1);*/
         HE.setPressurePhone(sharedPreferences.getFloat("Pressure", temp), HE.getBEFORE());
+        HE.setPressureAir(sharedPreferences.getFloat("Weather", temp), HE.getBEFORE());
         Toast.makeText(this, "Loading: " + carLL.toString(), Toast.LENGTH_LONG).show();
     }
 
@@ -140,7 +168,7 @@ public class MainActivity extends AbsRuntimePermission {
                 Bundle bundle = data.getBundleExtra("returnBundle");
                 double temp = bundle.getDouble("pressure");
                 int position = bundle.getInt("position");
-                HE.setPressureAir(position, ((float) temp));
+                HE.setPressureAir(((float) temp), position);
                 if (position == HE.getAFTER()){
                     startMapIntent();
                 }
@@ -148,6 +176,8 @@ public class MainActivity extends AbsRuntimePermission {
             }
             else {
                 textView.setText("Failed to get weather info");
+                //start a map intent and use a calculate function that does not use the weather
+                //maybe the weather is throwing everything off
             }
         }
     }
@@ -164,7 +194,13 @@ public class MainActivity extends AbsRuntimePermission {
     //LOCATE THE CAR (AFTER)
     public void MapActivity(View view){
         //HE.setPressurePhone(,HE.getBEFORE());
+
+        //There is a bug that is causing an issue where the calculations is off by a mile
+        //Temporarily disabling this to see if the weather API is the issue
         startWeatherIntent(WEATHER_ACTIVITY_CODE, HE.getAFTER());
+
+        //changing back to this for now until the weather bug is fixed
+
         //changing the order of intent calling in order to specify weather info for locating car
         //this will be called in the onIntentReturn() function and will be passed a boolean to check
         //startMapIntent();

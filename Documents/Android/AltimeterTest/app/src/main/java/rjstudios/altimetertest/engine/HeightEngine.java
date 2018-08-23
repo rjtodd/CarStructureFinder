@@ -24,8 +24,11 @@ public class HeightEngine
     float densityAirCalculated; //density of air using the temperature and pressure
     float waterPartialPressure; //polynomial expansion
 
-    Vector<Float> temperaturePhone; //temp collected from device in Celsius
-    Vector<Float> temperatureAir; //temp collected from JSON openweathermap API
+    //TO-DO
+    //Change all these Vectors to Arrays because its only storing two values
+    //Or come up with a good reason to keep it
+    float[] temperaturePhone = new float[2]; //temp collected from device in Celsius
+    float[] temperatureAir = new float[2]; //temp collected from JSON openweathermap API
     Vector<Float> pressureAir = new Vector<>(); //atmospheric pressure
     Vector<Float> pressurePhone = new Vector<>(); //pressure from the phone  THIS IS MEASURED IN hPa   1hPa = 100Pa
 
@@ -49,8 +52,12 @@ public class HeightEngine
 
 
 
-    public void setPressureAir(int position, float pressureAir) {
+    public void setPressureAir(float pressureAir, int position) {
         this.pressureAir.set(position, pressureAir);
+    }
+
+    public float getPressureAir(int position){
+        return this.pressureAir.get(position);
     }
 
 
@@ -62,6 +69,10 @@ public class HeightEngine
 
 
      public float calcHeightPress(float pressurePhoneAfter){
-         return ((pressurePhone.get(BEFORE) - pressurePhoneAfter + pressureAir.get(BEFORE) - pressureAir.get(AFTER)) / DENSITY_AIR_GENERAL / GRAVITY * MainActivity.PRESSURE_CONVERSION);
+         return ((pressurePhone.get(BEFORE) - pressurePhoneAfter ) / DENSITY_AIR_GENERAL / GRAVITY * MainActivity.PRESSURE_CONVERSION);
      }
+
+    public float calcHeightPressWeather(float pressurePhoneAfter){
+        return ((pressurePhone.get(BEFORE) - pressurePhoneAfter + pressureAir.get(BEFORE) - pressureAir.get(AFTER)) / DENSITY_AIR_GENERAL / GRAVITY * MainActivity.PRESSURE_CONVERSION);
+    }
 }
