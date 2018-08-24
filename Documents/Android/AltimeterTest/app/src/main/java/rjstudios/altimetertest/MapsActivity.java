@@ -88,11 +88,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 longitude = location.getLongitude();
                 Geocoder geocoder = new Geocoder(getApplicationContext());
                 LatLng latLng = new LatLng(latitude, longitude);
+                LatLng middle_point = new LatLng(midpoint(latitude, carLatLng.latitude), midpoint(longitude, carLatLng.longitude));
                 mMap.addMarker(new MarkerOptions().position(MainActivity.carLL).title("car"));
                 mMap.addMarker(new MarkerOptions().position(latLng).title("you"));
                 mMap.setMaxZoomPreference(20);
                 mMap.setMinZoomPreference(15);
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(middle_point));
 
 
             }
@@ -181,6 +182,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
         //updateLocationUI();
+    }
+
+    public double midpoint(double point_1, double point_2){
+        return (point_1 + point_2)/ 2;
     }
 
 }

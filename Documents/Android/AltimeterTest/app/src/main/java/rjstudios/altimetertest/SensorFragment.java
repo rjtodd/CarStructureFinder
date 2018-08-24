@@ -68,7 +68,7 @@ public class SensorFragment extends Fragment implements SensorEventListener{
         View view = getView();
         DecimalFormat df = new DecimalFormat("###.##");
         TextView pressView = view.findViewById(R.id.sensor_text);
-        float press = MainActivity.HE.calcHeightPress(pressData);
+        float press = MainActivity.HE.calcHeightPressWeather(pressData);
         float pressFT = press * METER_TO_FEET_CONVERSION;
         String message;
         if (press < 0){

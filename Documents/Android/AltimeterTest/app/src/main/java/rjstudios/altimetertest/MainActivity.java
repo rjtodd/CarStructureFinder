@@ -119,7 +119,7 @@ public class MainActivity extends AbsRuntimePermission {
         temp = sharedPreferences.getFloat("Pressure", temp1);*/
         HE.setPressurePhone(sharedPreferences.getFloat("Pressure", temp), HE.getBEFORE());
         HE.setPressureAir(sharedPreferences.getFloat("Weather", temp), HE.getBEFORE());
-        Toast.makeText(this, "Loading: " + carLL.toString(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "Loading: " + carLL.toString(), Toast.LENGTH_LONG).show();
     }
 
     //KEEP THIS FOR THE APP PERMISSIONS
