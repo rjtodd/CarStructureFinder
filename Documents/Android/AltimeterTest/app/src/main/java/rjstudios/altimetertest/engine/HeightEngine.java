@@ -3,7 +3,6 @@ package rjstudios.altimetertest.engine;
 import java.util.Vector;
 
 import rjstudios.altimetertest.MainActivity;
-import rjstudios.altimetertest.classes.MapData;
 
 /**
  * Created by Ronan on 6/26/2017.
@@ -73,6 +72,6 @@ public class HeightEngine
      }
 
     public float calcHeightPressWeather(float pressurePhoneAfter){
-        return ((pressurePhone.get(BEFORE) - pressurePhoneAfter + pressureAir.get(BEFORE) - pressureAir.get(AFTER)) / DENSITY_AIR_GENERAL / GRAVITY * MainActivity.PRESSURE_CONVERSION);
+        return ((pressurePhone.get(BEFORE) - pressurePhoneAfter - pressureAir.get(BEFORE) + pressureAir.get(AFTER)) / DENSITY_AIR_GENERAL / GRAVITY * MainActivity.PRESSURE_CONVERSION);
     }
 }

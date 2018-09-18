@@ -9,7 +9,6 @@ import android.hardware.Sensor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -19,7 +18,6 @@ import rjstudios.altimetertest.engine.HeightEngine;
 import rjstudios.altimetertest.engine.LocationActivity;
 import rjstudios.altimetertest.engine.PressureActivity;
 import rjstudios.altimetertest.engine.WeatherActivity;
-import rjstudios.altimetertest.engine.WeatherClient;
 
 //TO-DO
 //CLEAN UP THIS DAMN CODE IT'S A MESS
@@ -187,6 +185,7 @@ public class MainActivity extends AbsRuntimePermission {
     //MARK THE CAR (BEFORE)
     public void startMapResult(View view){
         startLocationResultIntent(MAP_ACTIVITY_CODE);
+        //startLocationResultIntent(getResources().getString(R.string.Position_Intent));
         startSensorIntent(Sensor.TYPE_PRESSURE);
         startWeatherIntent(WEATHER_ACTIVITY_CODE, HE.getBEFORE());
     }

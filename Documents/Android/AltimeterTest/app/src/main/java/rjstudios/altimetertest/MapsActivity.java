@@ -73,6 +73,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return;
         }
 
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(carLatLng));
+
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
@@ -89,8 +91,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Geocoder geocoder = new Geocoder(getApplicationContext());
                 LatLng latLng = new LatLng(latitude, longitude);
                 LatLng middle_point = new LatLng(midpoint(latitude, carLatLng.latitude), midpoint(longitude, carLatLng.longitude));
-                mMap.addMarker(new MarkerOptions().position(MainActivity.carLL).title("car"));
-                mMap.addMarker(new MarkerOptions().position(latLng).title("you"));
+                //mMap.addMarker(new MarkerOptions().position(MainActivity.carLL).title("car"));
+                mMap.addMarker(new MarkerOptions().position(latLng).title("You"));
                 mMap.setMaxZoomPreference(20);
                 mMap.setMinZoomPreference(15);
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(middle_point));

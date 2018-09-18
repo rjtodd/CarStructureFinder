@@ -47,8 +47,10 @@ public class WeatherActivity extends AppCompatActivity {
         final Intent returnIntent = new Intent();
         final Bundle returnBundle= new Bundle();
         press = 0;
-        String url_2 = "http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + longt + "&APPID=30d4c6dc386cb72d7288dce7bb5d81e8";
-        String url = "http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + longt + getResources().getString(R.string.weatherApi);
+
+        //PREPPING THE API CALLING USING LATITUDE AND LONGITUDE
+        //String url = "http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + longt + getResources().getString(R.string.weatherApi);
+        String url = "http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + longt + getResources().getString(R.string.WeatherMapAPI);
         JsonObjectRequest jor = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
