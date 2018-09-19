@@ -35,9 +35,15 @@ public class WeatherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        Bundle bundle = intent.getBundleExtra("bundle");
-        double[] temp = bundle.getDoubleArray("location");
-        position = bundle.getInt("position");
+
+        //remove hardcoding
+        //START INTENT MUST BE USED HERE
+        //Bundle bundle = intent.getBundleExtra("bundle");
+        Bundle bundle = intent.getBundleExtra(getResources().getString(R.string.Bundle_Start_Weather));
+        //double[] temp = bundle.getDoubleArray("location");
+        double[] temp = bundle.getDoubleArray(getResources().getString(R.string.Location_Intent));
+        //position = bundle.getInt("position");
+        position = bundle.getInt(getResources().getString(R.string.Position_Intent));
         //temp = intent.getDoubleArrayExtra("location");
         getWeather(temp[0], temp[1]);
 
@@ -58,9 +64,15 @@ public class WeatherActivity extends AppCompatActivity {
                         try {
                             JSONObject mainObject = response.getJSONObject("main");
                             press = mainObject.getDouble("pressure");
-                            returnBundle.putDouble("pressure", press);
-                            returnBundle.putInt("position", position);
-                            returnIntent.putExtra("returnBundle", returnBundle);
+
+                            //Replacing hardcoded string with values in R.string
+                            //RETURN INTENTS NEED TO BE USED HERE
+                            //returnBundle.putDouble("pressure", press);
+                            returnBundle.putDouble(getResources().getString(R.string.Pressure_Intent_Return), press);
+                            ///returnBundle.putInt("position", position);
+                            returnBundle.putInt(getResources().getString(R.string.Position_Intent_Return), position);
+                            //returnIntent.putExtra("returnBundle", returnBundle);
+                            returnIntent.putExtra(getResources().getString(R.string.Bundle_Return_Weather), returnBundle);
                             //returnIntent.putExtra("weather",press);
                             //Toast.makeText(MainActivity.class,"JSON Parsing", Toast.LENGTH_LONG).show();
                             //textView.setText("Pressure: " + press);

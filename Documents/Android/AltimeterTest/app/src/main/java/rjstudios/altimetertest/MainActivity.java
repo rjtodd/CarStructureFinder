@@ -29,12 +29,13 @@ public class MainActivity extends AbsRuntimePermission {
     private static final int REQUEST_PERMISSION = 10; //not too sure why this is 10 so be careful
     public static final int MAP_ACTIVITY_CODE= 123456; //random number to appease returnIntent for the map
     public static final int WEATHER_ACTIVITY_CODE = 43210; //random number to appease returnIntent for the weather
-    static HeightEngine HE; //This class does the math for calculating the height differences between the two recorded pressure data points
+    public static HeightEngine HE; //This class does the math for calculating the height differences between the two recorded pressure data points
     static double carCoordinate[]; //Array that holds the Lat in [0] and Long in [0] easier to pass in the intents
     public static LatLng carLL; //Latitude and Longitude object for storing car location created for the MapsActivity and really only used there
     public static String MAP_RETURN_INTENT = "Map return intent"; //This should be implemented once the car is located and something is done
     public static String MAP_CAR_LOCATION_INTENT = "Coordinates for the car"; //Just a global instance for the map intent
-     public static int PRESSURE_CONVERSION = 100; // converter the hPa to Pascal to keep SI
+    public static int PRESSURE_CONVERSION = 100; // converter the hPa to Pascal to keep SI
+    public static long THIRTY_MINUTES_IN_mMILLIsECONDS = 1800000; //This will be used to ensure that data from OWM won't skew data
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,7 +153,10 @@ public class MainActivity extends AbsRuntimePermission {
         }
         else if (requestCode == MAP_ACTIVITY_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                carCoordinate = data.getDoubleArrayExtra("location");
+                //remove hardcode
+                //USE RETURN INTENT
+                //carCoordinate = data.getDoubleArrayExtra("location");
+                carCoordinate = data.getDoubleArrayExtra(getResources().getString(R.string.Location_Intent_Return));
                 carLL = new LatLng(carCoordinate[0], carCoordinate[1]);
                 //textView.setText(carLL.toString());
                 saveData();
@@ -163,9 +167,14 @@ public class MainActivity extends AbsRuntimePermission {
         }
         else if (requestCode == WEATHER_ACTIVITY_CODE) {
             if(resultCode == Activity.RESULT_OK){
-                Bundle bundle = data.getBundleExtra("returnBundle");
-                double temp = bundle.getDouble("pressure");
-                int position = bundle.getInt("position");
+                //removing hardcoded values
+                //MUST USE RETURN INTENT
+               // Bundle bundle = data.getBundleExtra("returnBundle");
+                Bundle bundle = data.getBundleExtra(getResources().getString(R.string.Bundle_Return_Weather));
+                //double temp = bundle.getDouble("pressure");
+                double temp = bundle.getDouble(getResources().getString(R.string.Pressure_Intent_Return));
+                //int position = bundle.getInt("position");
+                int position = bundle.getInt(getResources().getString(R.string.Position_Intent_Return));
                 HE.setPressureAir(((float) temp), position);
                 if (position == HE.getAFTER()){
                     startMapIntent();
@@ -222,9 +231,15 @@ public class MainActivity extends AbsRuntimePermission {
     public void startWeatherIntent(int weatherCode, int position){
         Intent intent = new Intent(MainActivity.this, WeatherActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putDoubleArray("location", carCoordinate);
-        bundle.putInt("position", position);
-        intent.putExtra("bundle", bundle);
+        //Replace these hardcoded messages with values from R.String
+        //bundle.putDoubleArray("location", carCoordinate);
+        bundle.putDoubleArray(getResources().getString(R.string.Location_Intent), carCoordinate);
+
+        //bundle.putInt("position", position);
+        bundle.putInt(getResources().getString(R.string.Position_Intent), position);
+
+        //intent.putExtra("bundle", bundle);
+        intent.putExtra(getResources().getString(R.string.Bundle_Start_Weather), bundle);
         startActivityForResult(intent, weatherCode);
     }
     //This is for starting the Map to locate the car

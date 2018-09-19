@@ -8,14 +8,16 @@
 
     <!--Intents require ints to pass so these string are useless but I keep them here to remind
         myself not to waste time anymore-->
-    <!--<string name="Position_Intent">POSITION_INTENT</string>
+    <string name="Position_Intent">POSITION_INTENT</string>
     <string name="Position_Intent_Return">POSITION_INTENT_RETURN</string>
     <string name="Location_Intent">LOCATION_INTENT</string>
     <string name="Location_Intent_Return">LOCATION_INTENT_RETURN</string>
     <string name="Weather_Intent">WEATHER_INTENT</string>
     <string name="Weather_Intent_Return">WEATHER_INTENT_RETURN</string>
     <string name="Pressure_Intent">PRESSURE_INTENT</string>
-    <string name="Pressure_Intent_Return">PRESSURE_INTENT_RETURN</string>-->
+    <string name="Pressure_Intent_Return">PRESSURE_INTENT_RETURN</string>
+    <string name="Bundle_Start_Weather">BUNDLE_START_WEATHER</string>
+    <string name="Bundle_Return_Weather">BUNDLE_RETURN_WEATHER</string>
 
 
 

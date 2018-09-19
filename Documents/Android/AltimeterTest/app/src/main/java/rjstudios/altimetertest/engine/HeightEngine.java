@@ -23,9 +23,11 @@ public class HeightEngine
     float densityAirCalculated; //density of air using the temperature and pressure
     float waterPartialPressure; //polynomial expansion
 
+
     //TO-DO
     //Change all these Vectors to Arrays because its only storing two values
     //Or come up with a good reason to keep it
+    long[] timeElapsed = new long[2]; //keep track of time between marking and finding the car in milliseconds
     float[] temperaturePhone = new float[2]; //temp collected from device in Celsius
     float[] temperatureAir = new float[2]; //temp collected from JSON openweathermap API
     Vector<Float> pressureAir = new Vector<>(); //atmospheric pressure
@@ -47,6 +49,14 @@ public class HeightEngine
 
     public int getAFTER(){
         return AFTER;
+    }
+
+    public long[] getTimeElapsed() {
+        return timeElapsed;
+    }
+
+    public void setTimeElapsed(long timeElapsed, int position) {
+        this.timeElapsed[position] = timeElapsed;
     }
 
 

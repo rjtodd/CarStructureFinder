@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import java.util.ArrayList;
 
 import rjstudios.altimetertest.MainActivity;
+import rjstudios.altimetertest.engine.HeightEngine;
 
 /**
  * Created by Ronan on 3/19/2018.
@@ -34,8 +35,10 @@ public class LocationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        int temp = -1;
-        final int position = intent.getIntExtra("position", temp);
+
+        //POSITION MIGHT NOT BE DOING ANYTHING AT ALL HERE
+        //int temp = -1;
+        //final int position = intent.getIntExtra("position", temp);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         final Intent returnIntent = new Intent();
         mFusedLocationClient.getLastLocation()
@@ -47,7 +50,11 @@ public class LocationActivity extends AppCompatActivity {
                             //DATA[0] == LAT && DATA[1] == LONG
                             double[] data = new double[]{location.getLatitude(), location.getLongitude()};
                             returnIntent.putExtra("location", data);
-                            returnIntent.putExtra("position", position);
+
+                            //Record the time of this location
+                            MainActivity.HE.setTimeElapsed(location.getTime(), MainActivity.HE.getBEFORE());
+
+                            //returnIntent.putExtra("position", position);
                             setResult(Activity.RESULT_OK, returnIntent);
                             finish();
                         }
