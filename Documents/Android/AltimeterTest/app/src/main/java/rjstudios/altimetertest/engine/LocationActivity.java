@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import java.util.ArrayList;
 
 import rjstudios.altimetertest.MainActivity;
+import rjstudios.altimetertest.R;
 import rjstudios.altimetertest.engine.HeightEngine;
 
 /**
@@ -49,7 +50,7 @@ public class LocationActivity extends AppCompatActivity {
                         if (location != null){
                             //DATA[0] == LAT && DATA[1] == LONG
                             double[] data = new double[]{location.getLatitude(), location.getLongitude()};
-                            returnIntent.putExtra("location", data);
+                            returnIntent.putExtra(getResources().getString(R.string.Location_Intent_Return), data);
 
                             //Record the time of this location
                             MainActivity.HE.setTimeElapsed(location.getTime(), MainActivity.HE.getBEFORE());

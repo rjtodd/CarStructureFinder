@@ -68,14 +68,18 @@ public class SensorFragment extends Fragment implements SensorEventListener{
         View view = getView();
         DecimalFormat df = new DecimalFormat("###.##");
         TextView pressView = view.findViewById(R.id.sensor_text);
+        pressView.setSingleLine(false);
         float press = MainActivity.HE.calcHeightPressWeather(pressData);
         float pressFT = press * METER_TO_FEET_CONVERSION;
+        float pressRaw = MainActivity.HE.calcHeightPress(pressData) * METER_TO_FEET_CONVERSION;
         String message;
         if (press < 0){
-            message = "Go UP by: " + df.format(pressFT * -1 ) + "ft ";
+            message = "Go UP by: " + df.format(pressFT * -1 ) + "ft \n" +
+                    "No weather: " + df.format(pressRaw * -1) +"ft";
         }
         else if (press > 0){
-            message = "Go DOWN by: " + df.format(pressFT) + "ft ";
+            message = "Go DOWN by: " + df.format(pressFT) + "ft \n" +
+                    "No weather: " + df.format(pressRaw) + "ft";
         }
         else{
             message = "Did not change";

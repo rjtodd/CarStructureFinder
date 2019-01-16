@@ -14,10 +14,18 @@
     <string name="Location_Intent_Return">LOCATION_INTENT_RETURN</string>
     <string name="Weather_Intent">WEATHER_INTENT</string>
     <string name="Weather_Intent_Return">WEATHER_INTENT_RETURN</string>
+    <string name="Weather_Intent_Temp_Code">WEATHER_INTENT_TEMP_CODE</string>
+    <string name="Weather_Intent_Press_Code">WEATHER_INTENT_PRESS_CODE</string>
     <string name="Pressure_Intent">PRESSURE_INTENT</string>
     <string name="Pressure_Intent_Return">PRESSURE_INTENT_RETURN</string>
+    <string name="Temperature_Intent_Return">TEMPERATURE_INTENT_RETURN</string>
+    <string name="Humidity_Intent_Return">HUMIDITY_INTENT_RETURN</string>
     <string name="Bundle_Start_Weather">BUNDLE_START_WEATHER</string>
     <string name="Bundle_Return_Weather">BUNDLE_RETURN_WEATHER</string>
+    <string name="Map_Intent">MAP_INTENT</string>
+    <string name="Bundle_Start_Map">BUNDLE_START_MAP</string>
+
+
 
 
 

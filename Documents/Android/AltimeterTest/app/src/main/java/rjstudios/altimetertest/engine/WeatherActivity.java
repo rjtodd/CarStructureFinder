@@ -29,6 +29,8 @@ import rjstudios.altimetertest.R;
 public class WeatherActivity extends AppCompatActivity {
 
     public double press;
+    public double tempAir;
+    public double humidity;
     static int position = -1; //THIS IS TO PASS ON THE ARRAY POSITION TO DETERMINE BEFORE OR AFTER FOR LOCATING THE CAR
     //TextView textView;
     @Override
@@ -53,6 +55,8 @@ public class WeatherActivity extends AppCompatActivity {
         final Intent returnIntent = new Intent();
         final Bundle returnBundle= new Bundle();
         press = 0;
+        tempAir = 0;
+        humidity = 0;
 
         //PREPPING THE API CALLING USING LATITUDE AND LONGITUDE
         //String url = "http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + longt + getResources().getString(R.string.weatherApi);
@@ -64,18 +68,15 @@ public class WeatherActivity extends AppCompatActivity {
                         try {
                             JSONObject mainObject = response.getJSONObject("main");
                             press = mainObject.getDouble("pressure");
-
+                            tempAir = mainObject.getDouble("temp"); //Default unit is Kelvin
+                            humidity = mainObject.getDouble("humidity");
                             //Replacing hardcoded string with values in R.string
                             //RETURN INTENTS NEED TO BE USED HERE
-                            //returnBundle.putDouble("pressure", press);
                             returnBundle.putDouble(getResources().getString(R.string.Pressure_Intent_Return), press);
-                            ///returnBundle.putInt("position", position);
+                            returnBundle.putDouble(getResources().getString(R.string.Temperature_Intent_Return), tempAir);
+                            returnBundle.putDouble(getResources().getString(R.string.Humidity_Intent_Return), humidity);
                             returnBundle.putInt(getResources().getString(R.string.Position_Intent_Return), position);
-                            //returnIntent.putExtra("returnBundle", returnBundle);
                             returnIntent.putExtra(getResources().getString(R.string.Bundle_Return_Weather), returnBundle);
-                            //returnIntent.putExtra("weather",press);
-                            //Toast.makeText(MainActivity.class,"JSON Parsing", Toast.LENGTH_LONG).show();
-                            //textView.setText("Pressure: " + press);
                             setResult(Activity.RESULT_OK, returnIntent);
                             finish();
                         }catch (JSONException e){

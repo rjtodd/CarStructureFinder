@@ -29,6 +29,8 @@ public class MainActivity extends AbsRuntimePermission {
     private static final int REQUEST_PERMISSION = 10; //not too sure why this is 10 so be careful
     public static final int MAP_ACTIVITY_CODE= 123456; //random number to appease returnIntent for the map
     public static final int WEATHER_ACTIVITY_CODE = 43210; //random number to appease returnIntent for the weather
+    public static final int WEATHER_PRESS_REQUEST_CODE = 1231231; //random number to differentiate the return type of the Intent
+    public static final int WEATHER_TEMP_REQUEST_CODE = 2094823; //random number to differentiate the return type of the Intent
     public static HeightEngine HE; //This class does the math for calculating the height differences between the two recorded pressure data points
     static double carCoordinate[]; //Array that holds the Lat in [0] and Long in [0] easier to pass in the intents
     public static LatLng carLL; //Latitude and Longitude object for storing car location created for the MapsActivity and really only used there
@@ -41,7 +43,7 @@ public class MainActivity extends AbsRuntimePermission {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //loadData();
+
         /*SensorFragment sFrag = (SensorFragment) getFragmentManager().findFragmentById(R.id.sensor_frag);
         sFrag.setSensor(1);*/
         textView = (TextView) findViewById(R.id.TextView);
@@ -51,12 +53,16 @@ public class MainActivity extends AbsRuntimePermission {
         //boolean myBoolean = false;
         try {
             //myBoolean = savedInstanceState.getBoolean("MyBoolean");
-            float myFloat = savedInstanceState.getFloat("myPressure");
+            /*float myFloat = savedInstanceState.getFloat("myPressure");
             textView.setText("Last Pressure: " + myFloat);
             HE.setPressurePhone(myFloat, HE.getBEFORE());
             carCoordinate = savedInstanceState.getDoubleArray("myLocation");
             carLL = new LatLng(carCoordinate[0], carCoordinate[1]);
-            //Toast.makeText(this, carLL.toString(), Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, carLL.toString(), Toast.LENGTH_LONG).show();*/
+
+            //------------TRY AND REPLACE WITH THE LOADDATA() FUNCTION--------------//
+            loadData();
+
         } catch (Exception e) {
             //Toast.makeText(this, "Failed to load data", Toast.LENGTH_LONG).show();
             //loadData();
@@ -101,8 +107,10 @@ public class MainActivity extends AbsRuntimePermission {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putFloat("Latitude", ((float) carLL.latitude));
         editor.putFloat("Longitude", ((float) carLL.longitude));
-        editor.putFloat("Pressure", HE.getBeforePhonePressure());
+        editor.putFloat("Pressure", HE.getPhonePressure(HE.getBEFORE()));
         editor.putFloat("Weather", HE.getPressureAir(HE.getBEFORE()));
+        editor.putFloat("Humidity", HE.getHumidity(HE.getBEFORE()));
+        editor.putFloat("Temperature", HE.getTemperature(HE.getBEFORE()));
         editor.commit();
         //Toast.makeText(this, "saving: " + carLL.toString(), Toast.LENGTH_LONG).show();
         //textView.setText("Saving: " + carLL.toString() );
@@ -118,6 +126,8 @@ public class MainActivity extends AbsRuntimePermission {
         temp = sharedPreferences.getFloat("Pressure", temp1);*/
         HE.setPressurePhone(sharedPreferences.getFloat("Pressure", temp), HE.getBEFORE());
         HE.setPressureAir(sharedPreferences.getFloat("Weather", temp), HE.getBEFORE());
+        HE.setHumidity(sharedPreferences.getFloat("Humidity", temp), HE.getBEFORE());
+        HE.setTemperatureAir(sharedPreferences.getFloat("Temperature", temp), HE.getBEFORE());
         //Toast.makeText(this, "Loading: " + carLL.toString(), Toast.LENGTH_LONG).show();
     }
 
@@ -143,14 +153,16 @@ public class MainActivity extends AbsRuntimePermission {
                     //Toast.makeText(this, "Pressure: " + pressureData, Toast.LENGTH_LONG).show();
                     saveData();
                 }
-                /*else if(requestCode == Sensor.TYPE_AMBIENT_TEMPERATURE) {
+                else if(requestCode == Sensor.TYPE_AMBIENT_TEMPERATURE) {
+                    float temperatureData = -999f;
                     temperatureData = data.getFloatExtra("temperature", temperatureData);
                     textView.setText("Temperature: " + temperatureData);
-                    HE.setTemperaturePhone(temperatureData, LOCATION);
-                }*/
+                    HE.setTemperaturePhone(temperatureData, HE.getBEFORE());
+                }
 
             }
         }
+        //LOCATION INTENT
         else if (requestCode == MAP_ACTIVITY_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 //remove hardcode
@@ -166,17 +178,23 @@ public class MainActivity extends AbsRuntimePermission {
             }
         }
         else if (requestCode == WEATHER_ACTIVITY_CODE) {
-            if(resultCode == Activity.RESULT_OK){
+            if(resultCode == Activity.RESULT_OK) {
+
+
                 //removing hardcoded values
                 //MUST USE RETURN INTENT
-               // Bundle bundle = data.getBundleExtra("returnBundle");
+                // Bundle bundle = data.getBundleExtra("returnBundle");
                 Bundle bundle = data.getBundleExtra(getResources().getString(R.string.Bundle_Return_Weather));
                 //double temp = bundle.getDouble("pressure");
                 double temp = bundle.getDouble(getResources().getString(R.string.Pressure_Intent_Return));
+                double temp2 = bundle.getDouble(getResources().getString(R.string.Temperature_Intent_Return));
+                double temp3 = bundle.getDouble(getResources().getString(R.string.Humidity_Intent_Return));
                 //int position = bundle.getInt("position");
                 int position = bundle.getInt(getResources().getString(R.string.Position_Intent_Return));
+                HE.setTemperatureAir((float) temp2, position);
+                HE.setHumidity((float) temp3, position);
                 HE.setPressureAir(((float) temp), position);
-                if (position == HE.getAFTER()){
+                if (position == HE.getAFTER()) {
                     startMapIntent();
                 }
                 //textView.setText("" + data.getDoubleExtra("weather", temp));
@@ -187,6 +205,7 @@ public class MainActivity extends AbsRuntimePermission {
                 //maybe the weather is throwing everything off
             }
         }
+        saveData();
     }
 
     //================ONCLICK LISTENERS===================//
@@ -245,7 +264,9 @@ public class MainActivity extends AbsRuntimePermission {
     //This is for starting the Map to locate the car
     public void startMapIntent(){
         Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-        intent.putExtra(MAP_CAR_LOCATION_INTENT, carCoordinate);
+        Bundle bundle = new Bundle();
+        bundle.putDoubleArray(getResources().getString(R.string.Map_Intent), carCoordinate);
+        intent.putExtra(getResources().getString(R.string.Bundle_Start_Map), bundle);
         startActivity(intent);
     }
 }

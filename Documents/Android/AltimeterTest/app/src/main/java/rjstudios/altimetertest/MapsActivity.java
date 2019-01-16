@@ -61,8 +61,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         final Intent intent = getIntent();
 
-        double tempCoord[] = new double[2];
-        tempCoord = intent.getDoubleArrayExtra(MainActivity.MAP_CAR_LOCATION_INTENT);
+        Bundle bundle = intent.getBundleExtra(getResources().getString(R.string.Bundle_Start_Map));
+        double tempCoord[] = bundle.getDoubleArray(getResources().getString(R.string.Map_Intent));
         carLatLng = new LatLng(tempCoord[0], tempCoord[1]);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -73,7 +73,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return;
         }
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(carLatLng));
+
 
         locationListener = new LocationListener() {
             @Override
@@ -94,7 +94,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 //mMap.addMarker(new MarkerOptions().position(MainActivity.carLL).title("car"));
                 mMap.addMarker(new MarkerOptions().position(latLng).title("You"));
                 mMap.setMaxZoomPreference(20);
-                mMap.setMinZoomPreference(15);
+                mMap.setMinZoomPreference(10);
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(middle_point));
 
 
@@ -122,6 +122,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(MainActivity.carLL, 10));
     }
 
     @Override
@@ -141,7 +142,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     protected void createLocationRequest() {
         LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10000);
+        mLocationRequest.setInterval(1000000);
         mLocationRequest.setFastestInterval(5000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
